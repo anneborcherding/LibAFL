@@ -333,7 +333,7 @@ where
         /// Current performance statistics
         introspection_monitor: Box<ClientPerfMonitor>,
 
-        /// phantomm data
+        /// phantom data
         phantom: PhantomData<I>,
     },
     /// A new objective was found

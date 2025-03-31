@@ -351,7 +351,7 @@ where
         });
 
         // New testcase, we need to save it.
-        let mut file_name = file_name_orig.clone();
+        let mut file_name = format!("id-{}",file_name_orig.clone());
 
         let mut ctr = 2;
         let file_name = if self.locking {

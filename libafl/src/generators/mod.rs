@@ -14,6 +14,10 @@ use crate::{
 pub mod gramatron;
 pub use gramatron::*;
 
+/// Generator that takes the seeds from a file.
+pub mod seed_file;
+pub use seed_file::*;
+
 #[cfg(feature = "nautilus")]
 pub mod nautilus;
 #[cfg(feature = "nautilus")]

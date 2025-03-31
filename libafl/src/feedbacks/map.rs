@@ -5,7 +5,7 @@ use alloc::{
     vec::Vec,
 };
 #[rustversion::nightly]
-use core::simd::SimdOrd;
+use std::simd::prelude::SimdOrd;
 use core::{
     fmt::Debug,
     marker::PhantomData,
@@ -40,6 +40,8 @@ pub type MaxMapFeedback<O, S, T> = MapFeedback<DifferentIsNovel, O, MaxReducer, 
 pub type MinMapFeedback<O, S, T> = MapFeedback<DifferentIsNovel, O, MinReducer, S, T>;
 
 /// A [`MapFeedback`] that always returns `true` for `is_interesting`. Useful for tracing all executions.
+/// Note that when using this feedback, the initial observation will not be classified as interesting,
+/// since the initial observation is always filtered out by the is_interesting_default() of the MapFeedback.
 pub type AlwaysInterestingMapFeedback<O, S, T> = MapFeedback<AllIsNovel, O, NopReducer, S, T>;
 
 /// A [`MapFeedback`] that strives to maximize the map contents,

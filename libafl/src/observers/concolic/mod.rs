@@ -252,9 +252,7 @@ pub enum SymExpr {
         a: SymExprRef,
         b: SymExprRef,
     },
-    FloatNeg {
-        op: SymExprRef,
-    },
+
     FloatAbs {
         op: SymExprRef,
     },
@@ -279,11 +277,6 @@ pub enum SymExpr {
         b: SymExprRef,
     },
 
-    Ite {
-        cond: SymExprRef,
-        a: SymExprRef,
-        b: SymExprRef,
-    },
     Sext {
         op: SymExprRef,
         bits: u8,

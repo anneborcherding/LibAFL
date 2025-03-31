@@ -60,7 +60,7 @@ where
     o2_name: String,
     /// The function used to compare the two observers
     compare_fn: F,
-    phantomm: PhantomData<(O1, O2, I, S)>,
+    phantom: PhantomData<(O1, O2, I, S)>,
 }
 
 impl<F, I, O1, O2, S> DiffFeedback<F, I, O1, O2, S>
@@ -83,7 +83,7 @@ where
                 o2_name,
                 name: name.to_string(),
                 compare_fn,
-                phantomm: PhantomData,
+                phantom: PhantomData,
             })
         }
     }

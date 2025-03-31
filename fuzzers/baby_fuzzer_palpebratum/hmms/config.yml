@@ -1,0 +1,4 @@
+preprocessor_type: ae
+preprocessor_path: "/home/ubuntu/experiments/hmms/pretrained_models/ae_encoder_all"
+model_nodes: 51
+model_path: "/home/ubuntu/experiments/hmms/pretrained_models/hmm_all_ae_51"

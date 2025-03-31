@@ -1,0 +1,26 @@
+[package]
+name = "baby_fuzzer_palpebratum"
+version = "0.1.0"
+authors = ["Anne Borcherding <anne.borcherding@iosb.fraunhofer.de>"]
+edition = "2021"
+
+[features]
+default = ["std"]
+tui = []
+std = []
+panic = []
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1
+opt-level = 3
+debug = true
+
+[dependencies]
+libafl = { path = "../../libafl/", features = ["python"] }
+libafl_bolts = { path = "../../libafl_bolts/" }
+clap = {  version = "4.4.11", features = ["derive"] }

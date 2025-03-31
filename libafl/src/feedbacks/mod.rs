@@ -5,17 +5,22 @@
 // TODO: make S of Feedback<S> an associated type when specialisation + AT is stable
 
 pub mod map;
+
 pub use map::*;
 
 pub mod differential;
+
 pub use differential::DiffFeedback;
+
 #[cfg(feature = "std")]
 pub mod concolic;
+
 #[cfg(feature = "std")]
 pub use concolic::ConcolicFeedback;
 
 #[cfg(feature = "std")]
 pub mod new_hash_feedback;
+
 #[cfg(feature = "std")]
 pub use new_hash_feedback::NewHashFeedback;
 #[cfg(feature = "std")]
@@ -23,11 +28,13 @@ pub use new_hash_feedback::NewHashFeedbackMetadata;
 
 #[cfg(feature = "nautilus")]
 pub mod nautilus;
+
 use alloc::string::{String, ToString};
 use core::{
     fmt::{self, Debug, Formatter},
     marker::PhantomData,
 };
+use rand::Rng;
 
 use libafl_bolts::Named;
 #[cfg(feature = "nautilus")]
@@ -131,6 +138,150 @@ where
 pub trait HasObserverName {
     /// The name associated with the observer
     fn observer_name(&self) -> &str;
+}
+
+/// A [`Feedback`] that always returns `true` for `is_interesting`. Useful for tracing all executions.
+#[derive(Debug)]
+pub struct AlwaysInterestingFeedback<S>
+where
+    S: UsesInput,
+{
+    phantom: PhantomData<S>,
+}
+
+impl<S> AlwaysInterestingFeedback<S>
+where
+    S: UsesInput + Debug + HasClientPerfMonitor,
+{
+    /// Return a new [`Feedback`] that always returns `true` for `is_interesting`. Useful for tracing all executions.
+    pub fn new() -> Self {
+        Self{ phantom: Default::default() }
+    }
+}
+
+impl<S> Named for AlwaysInterestingFeedback<S>
+where
+    S: UsesInput,
+{
+    fn name(&self) -> &str {
+        "AlwaysInterestingFeedback"
+    }
+}
+
+impl<S> Feedback<S> for AlwaysInterestingFeedback<S>
+where
+    S: UsesInput + Debug + HasClientPerfMonitor,
+{
+    fn is_interesting<EM, OT>(
+        &mut self,
+        _state: &mut S,
+        _manager: &mut EM,
+        _input: &S::Input,
+        _observers: &OT,
+        _exit_kind: &ExitKind,
+    ) -> Result<bool, Error>
+    where
+        EM: EventFirer<State = S>,
+        OT: ObserversTuple<S>,
+    {
+        Ok(true)
+    }
+}
+
+/// A [`MapFeedback`] that always returns `false` for `is_interesting`. Useful as baseline for fuzzing evaluations.
+#[derive(Debug)]
+pub struct NeverInterestingFeedback<S>
+where
+    S: UsesInput,
+{
+    phantom: PhantomData<S>,
+}
+
+impl<S> NeverInterestingFeedback<S>
+where
+    S: UsesInput + Debug + HasClientPerfMonitor,
+{
+    /// Return a new [`Feedback`] that always returns `false` for `is_interesting`. Useful as baseline for fuzzing evaluations.
+    pub fn new() -> Self {
+        Self{ phantom: Default::default() }
+    }
+}
+
+impl<S> Named for NeverInterestingFeedback<S>
+where
+    S: UsesInput,
+{
+    fn name(&self) -> &str {
+        "NeverInterestingFeedback"
+    }
+}
+
+impl<S> Feedback<S> for NeverInterestingFeedback<S>
+where
+    S: UsesInput + Debug + HasClientPerfMonitor,
+{
+    fn is_interesting<EM, OT>(
+        &mut self,
+        _state: &mut S,
+        _manager: &mut EM,
+        _input: &S::Input,
+        _observers: &OT,
+        _exit_kind: &ExitKind,
+    ) -> Result<bool, Error>
+    where
+        EM: EventFirer<State = S>,
+        OT: ObserversTuple<S>,
+    {
+        Ok(false)
+    }
+}
+
+/// A [`Feedback`] that random returns either `true` or `false` for `is_interesting`. Useful as baseline for fuzzing evaluations.
+#[derive(Debug)]
+pub struct RandomFeedback<S>
+where
+    S: UsesInput,
+{
+    phantom: PhantomData<S>,
+}
+
+impl<S> RandomFeedback<S>
+where
+    S: UsesInput + Debug + HasClientPerfMonitor,
+{
+    /// Return a new [`Feedback`] that random returns either `true` or `false` for `is_interesting`. Useful as baseline for fuzzing evaluations.
+    pub fn new() -> Self {
+        Self{ phantom: Default::default() }
+    }
+}
+
+impl<S> Named for RandomFeedback<S>
+where
+    S: UsesInput,
+{
+    fn name(&self) -> &str {
+        "RandomMapFeedback"
+    }
+}
+
+impl<S> Feedback<S> for RandomFeedback<S>
+where
+    S: UsesInput + Debug + HasClientPerfMonitor,
+{
+    fn is_interesting<EM, OT>(
+        &mut self,
+        _state: &mut S,
+        _manager: &mut EM,
+        _input: &S::Input,
+        _observers: &OT,
+        _exit_kind: &ExitKind,
+    ) -> Result<bool, Error>
+    where
+        EM: EventFirer<State = S>,
+        OT: ObserversTuple<S>,
+    {
+        Ok(rand::thread_rng().gen::<bool>())
+    }
 }
 
 /// A combined feedback consisting of multiple [`Feedback`]s

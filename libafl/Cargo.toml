@@ -145,7 +145,7 @@ serde = { version = "1.0", default-features = false, features = ["alloc", "deriv
 postcard = { version = "1.0", features = ["alloc"], default-features = false } # no_std compatible serde serialization format
 bincode = {version = "1.3", optional = true }
 c2rust-bitfields = { version = "0.18", features = ["no_std"] }
-ahash = { version = "0.8", default-features=false } # The hash function already used in hashbrown
+ahash = { version = "0.8.11", default-features=false } # The hash function already used in hashbrown
 meminterval = { version = "0.4", features = ["serde"] }
 backtrace = {version = "0.3", optional = true} # Used to get the stacktrace in StacktraceObserver
 typed-builder = { version = "0.16", optional = true } # Implement the builder pattern at compiletime
@@ -172,6 +172,9 @@ z3 = { version = "0.12.0", features = ["static-link-z3"], optional = true } # fo
 pyo3 = { version = "0.18", optional = true, features = ["serde", "macros"] }
 concat-idents = { version = "1.1.3", optional = true }
 
+net2 = {version = "0.2.39"}
+pcap = {version = "1.1.0"}
+
 libcasr = { version = "2.7", optional = true}
 
 # optional-dev deps (change when target.'cfg(accessible(::std))'.test-dependencies will be stable)
@@ -183,6 +186,11 @@ document-features = { version = "0.2", optional = true }
 # AGPL
 # !!! this create requires nightly
 grammartec = { version = "0.3.1", optional = true }
+
+# used for random is interesting metric
+rand = {version = "0.8.5" }
+
+run_script = {version = "0.10.1"}
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2" # For (*nix) libc

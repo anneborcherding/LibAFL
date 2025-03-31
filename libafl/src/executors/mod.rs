@@ -23,11 +23,22 @@ pub use forkserver::{Forkserver, ForkserverExecutor, TimeoutForkserverExecutor};
 pub mod combined;
 pub use combined::CombinedExecutor;
 
+pub mod interleaved;
+pub use interleaved::InterleavedExecutor;
+
 pub mod shadow;
 pub use shadow::ShadowExecutor;
 
 pub mod with_observers;
 pub use with_observers::WithObservers;
+
+/// Executor which sends the input via TCP to the target
+pub mod tcp;
+pub use tcp::TcpExecutor;
+
+/// Executor which triggers a HMM to approximate the behavior of the target with respect to the given input
+pub mod hmm;
+pub use hmm::HmmExecutor;
 
 #[cfg(all(feature = "std", any(unix, doc)))]
 pub mod command;

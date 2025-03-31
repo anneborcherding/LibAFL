@@ -14,20 +14,10 @@ use libafl_bolts::{
 use serde::{Deserialize, Serialize};
 
 use super::MutationId;
+pub use crate::mutators::{mutations::*, token_mutations::*};
 use crate::{
     corpus::{Corpus, CorpusId},
-    mutators::{
-        mutations::{
-            BitFlipMutator, ByteAddMutator, ByteDecMutator, ByteFlipMutator, ByteIncMutator,
-            ByteInterestingMutator, ByteNegMutator, ByteRandMutator, BytesCopyMutator,
-            BytesDeleteMutator, BytesExpandMutator, BytesInsertCopyMutator, BytesInsertMutator,
-            BytesRandInsertMutator, BytesRandSetMutator, BytesSetMutator, BytesSwapMutator,
-            CrossoverInsertMutator, CrossoverReplaceMutator, DwordAddMutator,
-            DwordInterestingMutator, QwordAddMutator, WordAddMutator, WordInterestingMutator,
-        },
-        token_mutations::{TokenInsert, TokenReplace},
-        MutationResult, Mutator, MutatorsTuple,
-    },
+    mutators::{MutationResult, Mutator, MutatorsTuple},
     state::{HasCorpus, HasMetadata, HasRand},
     Error,
 };

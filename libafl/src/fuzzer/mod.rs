@@ -379,6 +379,23 @@ where
             }
         }
 
+        // Add it to the solution corpus in any case (hacky, needed for evaluation)
+
+        let mut testcase = Testcase::with_executions(input.clone(), *state.executions());
+        testcase.set_parent_id_optional(*state.corpus().current());
+        self.objective_mut()
+            .append_metadata(state, observers, &mut testcase)?;
+        state.solutions_mut().add(testcase)?;
+
+        if send_events {
+            manager.fire(
+                state,
+                Event::Objective {
+                    objective_size: state.solutions().count(),
+                },
+            )?;
+        }
+
         match res {
             ExecuteInputResult::None => {
                 self.feedback_mut().discard_metadata(state, &input)?;
@@ -387,7 +404,7 @@ where
             }
             ExecuteInputResult::Corpus => {
                 // Not a solution
-                self.objective_mut().discard_metadata(state, &input)?;
+                // self.objective_mut().discard_metadata(state, &input)?;
 
                 // Add the input to the main corpus
                 let mut testcase = Testcase::with_executions(input.clone(), *state.executions());
